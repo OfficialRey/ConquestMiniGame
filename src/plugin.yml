@@ -1,0 +1,10 @@
+main: net.conquest.plugin.Conquest
+name: Conquest
+version: 1.0-SNAPSHOT
+author: Rey
+api-version: 1.16
+
+commands:
+  build:
+  setzone:
+  setlobby:
