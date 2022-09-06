@@ -151,10 +151,8 @@ public abstract class Captureable {
         attackTime = 0;
         bar.setTitle(currentConquestTeam.getChatColor() + zone.NAME);
         bar.setColor(currentConquestTeam.getBarColor());
-        for (ConquestEntity entity : Conquest.getGame().getAllEntities()) {
-            if (entity instanceof ConquestPlayer) {
-                sendCaptureMessage((ConquestPlayer) entity);
-            }
+        for (ConquestPlayer player : Conquest.getGame().getAllPlayers()) {
+            sendCaptureMessage(player);
         }
         initStructures();
     }

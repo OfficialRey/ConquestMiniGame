@@ -257,19 +257,20 @@ public class Util {
     public static void createExplosion(Location location, float radius, ConquestEntity damager, int damage) {
         Util.playParticleAtAll(location, Particle.EXPLOSION_LARGE, (int) (15 * radius), radius);
         Util.playSoundAtAll(Sound.ENTITY_GENERIC_EXPLODE, location);
-        for (ConquestEntity allEntities : Conquest.getGame().getAllEntities()) {
-            if (damager.getTeam() != allEntities.getTeam()) {
-                double distance = location.distance(allEntities.getBukkitEntity().getLocation());
-                if (distance < radius) {
-                    Vector locToEntity = allEntities.getBukkitEntity().getLocation().subtract(location).toVector().normalize();
+        for(Entity entity : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
+            double distance = location.distance(entity.getLocation());
+            if(distance < radius) {
+                ConquestEntity conquestEntity = Conquest.getGame().getConquestEntity(entity.getUniqueId());
+                if(conquestEntity != null && damager.getTeam() != conquestEntity.getTeam()) {
+                    Vector locToEntity = conquestEntity.getBukkitEntity().getLocation().subtract(location).toVector().normalize();
                     locToEntity.multiply(radius / distance / EXPLOSION_NORMALIZATION);
 
                     if (locToEntity.length() > MAX_EXPLOSION_VELOCITY) {
                         locToEntity.normalize().multiply(MAX_EXPLOSION_VELOCITY);
                     }
 
-                    allEntities.getBukkitEntity().setVelocity(locToEntity);
-                    allEntities.damage((int) (damage / (distance / 4f)), damager, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION);
+                    conquestEntity.getBukkitEntity().setVelocity(locToEntity);
+                    conquestEntity.damage((int) (damage / (distance / 4f)), damager, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION);
                 }
             }
         }
