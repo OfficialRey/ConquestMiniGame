@@ -216,28 +216,11 @@ public class Util {
     private static void animatePlayer(Player player) {
         Util.playPitchedSoundAtAll(Sound.ENTITY_WITHER_SPAWN, player.getLocation(), 1.5f);
         for (int theta = 0; theta < 360; theta++) {
-
-            double finalTheta = theta;
-
-            new BukkitRunnable() {
-
-                double x;
-                final double y = player.getHeight() / 360 * finalTheta;
-                double z;
-
-                @Override
-                public void run() {
-                    Location loc = player.getLocation();
-
-                    x = Math.cos(finalTheta) * Util.CIRCLE_RADIUS;
-                    z = Math.sin(finalTheta) * Util.CIRCLE_RADIUS;
-
-                    loc.add(x, y, z);
-                    //loc.getWorld().spawnParticle(Particle.ASH, loc, 1);
-                    loc.getWorld().spawnParticle(Particle.SPELL, loc.getX(), loc.getY(), loc.getZ(), 1, 0, 0, 0, 0);
-                    loc.subtract(x, y, z);
-                }
-            }.runTaskLater(Conquest.getPlugin(), 0);
+            double x = Math.cos(Math.toRadians(theta)) * Util.CIRCLE_RADIUS;
+            double z = Math.sin(Math.toRadians(theta)) * Util.CIRCLE_RADIUS;
+            Location particle_pos = player.getLocation();
+            particle_pos.add(x, player.getHeight() / 360 * theta, z);
+            particle_pos.getWorld().spawnParticle(Particle.SPELL, particle_pos, 1, 0, 0, 0, 0);
         }
     }
 
