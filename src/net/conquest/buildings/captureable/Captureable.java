@@ -58,7 +58,14 @@ public abstract class Captureable {
     }
 
     public void run() {
+        runStructures();
         runCapture();
+    }
+
+    private void runStructures() {
+        for(Structure to_run : this.structures) {
+            to_run.run();
+        }
     }
 
     private void runCapture() {
@@ -155,6 +162,7 @@ public abstract class Captureable {
     private void initStructures() {
         for (Structure structure : structures) {
             structure.reset();
+            structure.setTeam(this.getCurrentTeam());
         }
     }
 
@@ -202,6 +210,7 @@ public abstract class Captureable {
     }
 
     protected void addStructure(Structure structure) {
+        structure.setTeam(this.getCurrentTeam());
         structures.add(structure);
     }
 

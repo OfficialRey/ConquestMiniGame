@@ -35,6 +35,6 @@ public enum MobData {
         DEFENSE = defense;
         WALK_SPEED = walkSpeed;
         GROUP_SIZE = groupSize;
-        SPAWN_TIME = spawnTime * Util.TICKS_PER_SECOND;
+        SPAWN_TIME = spawnTime;
     }
 }

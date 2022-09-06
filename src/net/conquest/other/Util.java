@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class Util {
 
-    public static final int GAME_SPEED = 2;
+    public static final int GAME_SPEED = 1;
 
     public static final int TICKS_PER_SECOND = 20, DEFAULT_HEALTH = 20, DEFAULT_HUNGER = 20, NULL = 0, MIN_PLAYERS = 2, MAX_PLAYERS = 20, START_COUNTDOWN = 30, END_COUNTDOWN = 20, IDLE_TIME = 15, KNIGHT_HORSE_CHANCE = 10, //10% Chance for a knight to ride a (undead) horse
             DEAD_HORSE_CHANCE = 40, //40% Chance to ride an undead horse
