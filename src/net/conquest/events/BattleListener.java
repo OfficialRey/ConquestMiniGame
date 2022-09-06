@@ -40,8 +40,8 @@ public class BattleListener implements Listener {
         DamageCause cause = e.getCause();
         if (cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.ENTITY_SWEEP_ATTACK) {
             if (e.getDamager() instanceof LivingEntity && e.getEntity() instanceof LivingEntity) {
-                ConquestEntity attacker = Conquest.getGame().getConquestEntity(e.getDamager());
-                ConquestEntity victim = Conquest.getGame().getConquestEntity(e.getEntity());
+                ConquestEntity attacker = Conquest.getGame().getConquestEntity(e.getDamager().getUniqueId());
+                ConquestEntity victim = Conquest.getGame().getConquestEntity(e.getEntity().getUniqueId());
 
                 if (attacker != null && victim != null) {
                     if (attacker.getTeam() != victim.getTeam()) {
@@ -63,8 +63,8 @@ public class BattleListener implements Listener {
         if (e.getCause() == DamageCause.PROJECTILE) {
             if (e.getDamager() instanceof Projectile) {
                 Projectile projectile = (Projectile) e.getDamager();
-                ConquestEntity attacker = Conquest.getGame().getConquestEntity((Entity) projectile.getShooter());
-                ConquestEntity victim = Conquest.getGame().getConquestEntity(e.getEntity());
+                ConquestEntity attacker = Conquest.getGame().getConquestEntity(((Entity)projectile.getShooter()).getUniqueId());
+                ConquestEntity victim = Conquest.getGame().getConquestEntity(e.getEntity().getUniqueId());
 
                 if (attacker != null && victim != null) {
                     if (attacker.getTeam() != victim.getTeam()) {
@@ -84,7 +84,7 @@ public class BattleListener implements Listener {
     public void onAmbientDamage(EntityDamageEvent e) {
         DamageCause cause = e.getCause();
         if (cause != DamageCause.CUSTOM && cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_EXPLOSION && cause != DamageCause.ENTITY_SWEEP_ATTACK && cause != DamageCause.PROJECTILE) {
-            ConquestEntity entity = Conquest.getGame().getConquestEntity(e.getEntity());
+            ConquestEntity entity = Conquest.getGame().getConquestEntity(e.getEntity().getUniqueId());
             if (entity != null) {
                 if (entity.isVulnerable()) {
                     float damage = (int) e.getDamage() + 1;

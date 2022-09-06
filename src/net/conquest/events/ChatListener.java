@@ -20,7 +20,7 @@ public class ChatListener implements Listener {
         if (Conquest.getGame().getSpectators().contains(e.getPlayer())) {
             Conquest.getGame().getSpectators().forEach(player -> player.sendMessage(Util.SPECTATOR_CHAT_PREFIX + ChatColor.GOLD + e.getPlayer().getDisplayName() + ChatColor.GRAY + " >> " + ChatColor.WHITE + e.getMessage()));
         } else {
-            ConquestPlayer player = (ConquestPlayer) Conquest.getGame().getConquestEntity(e.getPlayer());
+            ConquestPlayer player = Conquest.getGame().getConquestPlayer(e.getPlayer().getUniqueId());
             if (player != null) {
                 ConquestTeam conquestTeam = player.getTeam();
                 Bukkit.broadcastMessage(conquestTeam.getChatColor() + e.getPlayer().getDisplayName() + Util.CHAT_MESSAGE_PREFIX + e.getMessage());
