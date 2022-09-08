@@ -1,16 +1,20 @@
 package net.conquest.entities.mobs;
 
+import net.conquest.economy.PlayerGameStatistics;
+import net.conquest.entities.PlayerStatistic;
 import net.conquest.entities.abilities.Ability;
 import net.conquest.menu.item.ItemType;
 import net.conquest.menu.item.game.ConquestItem;
 import net.conquest.other.ConquestTeam;
 import net.conquest.kits.Kit;
 import net.conquest.menu.item.game.ItemList;
+import net.conquest.other.DeathMessage;
 import net.conquest.other.Util;
 import net.conquest.plugin.Conquest;
+import net.conquest.serialization.Serialization;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
@@ -25,6 +29,8 @@ public class ConquestPlayer extends ConquestEntity {
     protected int experienceNeeded;
     private Kit kit;
 
+    private final PlayerGameStatistics playerGameStatistics;
+    private final PlayerStatistic playerStatistic;
     private boolean isSpectating;
     private boolean isAlive;
     private int respawnTime;
@@ -36,6 +42,8 @@ public class ConquestPlayer extends ConquestEntity {
         isSpectating = true;
         isVulnerable = false;
         isDamageable = false;
+        playerGameStatistics = new PlayerGameStatistics();
+        playerStatistic = Serialization.loadPlayerStatistic(player);
     }
 
     public Player getOwner() {
@@ -104,7 +112,14 @@ public class ConquestPlayer extends ConquestEntity {
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath(ConquestEntity killer) {
+        playerGameStatistics.addDeath();
+        DeathMessage.createDeathMessage(this, killer);
+
+        if (killer instanceof ConquestPlayer) {
+            ((ConquestPlayer) killer).getPlayerGameStatistics().addPlayerKill();
+        }
+
         respawnTime = Conquest.getGame().getGameStatus().getRespawnTime();
         isDamageable = false;
         Util.playBloodParticle(entity);
@@ -118,7 +133,7 @@ public class ConquestPlayer extends ConquestEntity {
 
     }
 
-    private void enterSpectatorMode() {
+    public void enterSpectatorMode() {
         isSpectating = true;
         isAlive = false;
         setVulnerable(false);
@@ -169,10 +184,16 @@ public class ConquestPlayer extends ConquestEntity {
         return isAlive;
     }
 
-    public void lose() {
+    public void endGame(boolean wonGame) {
         isAlive = false;
+        playerGameStatistics.setPlayTime(Conquest.getGame().getGameStatus().getGameTime());
+        playerStatistic.addStatistics(playerGameStatistics, wonGame);
         enterSpectatorMode();
-        Util.lose(getOwner());
+        if (wonGame) {
+            Util.win(getOwner());
+        } else {
+            Util.lose(getOwner());
+        }
     }
 
     public boolean isOnGround() {
@@ -206,9 +227,19 @@ public class ConquestPlayer extends ConquestEntity {
     }
 
     @Override
-    public void damageTrue(int damage, ConquestEntity damager, EntityDamageEvent.DamageCause cause) {
-        if (!isVulnerable && !isDamageable && !isSpectating) {
-            super.damageTrue(damage, damager, cause);
+    public void damageTrue(int damage, ConquestEntity damager, DamageCause cause) {
+        super.damageTrue(damage, damager, cause);
+        playerGameStatistics.addDamageReceived(damage);
+        if (damager instanceof ConquestPlayer) {
+            ((ConquestPlayer) damager).getPlayerGameStatistics().addDamageDealt(damage);
         }
+    }
+
+    public PlayerGameStatistics getPlayerGameStatistics() {
+        return playerGameStatistics;
+    }
+
+    public void onGameEnd(boolean wonGame) {
+        playerStatistic.addStatistics(playerGameStatistics, wonGame);
     }
 }

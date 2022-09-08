@@ -2,6 +2,7 @@ package net.conquest.other;
 
 import net.conquest.buildings.captureable.Captureable;
 import net.conquest.entities.mobs.ConquestEntity;
+import net.conquest.entities.mobs.ConquestMob;
 import net.conquest.entities.mobs.ConquestPlayer;
 import net.conquest.plugin.Conquest;
 import org.bukkit.ChatColor;
@@ -154,13 +155,17 @@ public class ConquestTeam {
         zones.add(zone);
     }
 
-    public void delete() {
-        getEntities().forEach(ConquestEntity::killEntity);
-        getZones().forEach(Captureable::remove);
+    public void endGame(boolean wonGame) {
+        getPlayers().forEach(player -> player.endGame(wonGame));
+        deleteEntities();
     }
 
-    public void lose() {
-        getPlayers().forEach(ConquestPlayer::lose);
+    public void deleteEntities() {
+        getEntities().forEach(conquestEntity -> {
+            if (conquestEntity instanceof ConquestMob) {
+                conquestEntity.onDeath(null);
+            }
+        });
     }
 
     //Remove dead or unused entities to save memory

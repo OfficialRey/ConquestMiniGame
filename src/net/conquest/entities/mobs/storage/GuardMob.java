@@ -26,7 +26,7 @@ public class GuardMob extends ConquestMob {
     }
 
     @Override
-    public void onDeath() {
+    public void onMobDeath() {
 
     }
 

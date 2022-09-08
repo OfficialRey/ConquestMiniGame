@@ -14,6 +14,9 @@ public abstract class Structure {
     protected ConquestTeam team;
     private BukkitTask task;
 
+
+    private int exeTime;
+
     public Structure(Location location, int executionTime) {
         this.location = location;
         this.executionTime = executionTime;
@@ -23,7 +26,7 @@ public abstract class Structure {
         task = new BukkitRunnable() {
             @Override
             public void run() {
-                Structure.this.run();
+                execute();
             }
         }.runTaskTimer(Conquest.getPlugin(), 0, executionTime / Util.GAME_SPEED);
     }
@@ -32,10 +35,6 @@ public abstract class Structure {
         if (task != null) {
             task.cancel();
         }
-    }
-
-    public void run() {
-        execute();
     }
 
     protected abstract void execute();

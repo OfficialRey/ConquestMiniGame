@@ -163,6 +163,7 @@ public abstract class Captureable {
         player.getBukkitEntity().sendMessage(Util.PREFIX + ChatColor.WHITE + "Team " + currentConquestTeam.getChatColor() + currentConquestTeam.getName() + ChatColor.WHITE + " has captured " + ChatColor.GOLD + zone.NAME);
         if (player.getTeam() == currentConquestTeam) {
             ((Player) player.getBukkitEntity()).sendTitle(currentConquestTeam.getChatColor() + "CAPTURED", ChatColor.GREEN + zone.NAME + ChatColor.WHITE + " has been captured", Util.TICKS_PER_SECOND, Util.TICKS_PER_SECOND * 3, Util.TICKS_PER_SECOND);
+            player.getPlayerGameStatistics().addCapture();
         } else {
             ((Player) player.getBukkitEntity()).sendTitle(currentConquestTeam.getChatColor() + "LOST", ChatColor.RED + zone.NAME + ChatColor.WHITE + " has been lost", Util.TICKS_PER_SECOND, Util.TICKS_PER_SECOND * 3, Util.TICKS_PER_SECOND);
         }
