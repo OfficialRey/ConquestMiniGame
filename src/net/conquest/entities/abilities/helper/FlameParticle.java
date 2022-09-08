@@ -8,6 +8,7 @@ import net.conquest.plugin.Conquest;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -33,14 +34,17 @@ public class FlameParticle {
             @Override
             public void run() {
                 particle.teleport(particle.getLocation().add(velocity));
-                for (ConquestEntity entity : Conquest.getGame().getAllEntities()) {
-                    if (entity.getTeam() != team) {
-                        if (entity.distance(particle.getLocation().add(0, -1, 0)) < 1.5f) {
-                            entity.damage(damage);
-                            entity.getBukkitEntity().setFireTicks(entity.getBukkitEntity().getFireTicks() + 3);
+                for(Entity entity : FlameParticle.this.particle.getNearbyEntities(1.5f, 2.5f, 1.5f)) {
+                    ConquestEntity conquestEntity = Conquest.getGame().getConquestEntity(entity.getUniqueId());
+
+                    if (conquestEntity != null && conquestEntity.getTeam() != team) {
+                        if (conquestEntity.distance(particle.getLocation().add(0, -1, 0)) < 1.5f) {
+                            conquestEntity.damage(damage);
+                            entity.setFireTicks(entity.getFireTicks() + 3);
                         }
                     }
                 }
+
                 if (lifetime > MAX_LIFETIME) {
                     stopTask();
                 }

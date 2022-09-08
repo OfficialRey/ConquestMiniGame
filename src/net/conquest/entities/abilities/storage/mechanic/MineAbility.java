@@ -9,6 +9,7 @@ import net.conquest.other.Util;
 import net.conquest.plugin.Conquest;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -86,9 +87,11 @@ public class MineAbility extends ActiveAbility {
                         Util.playPitchedSoundAtAll(Sound.BLOCK_NOTE_BLOCK_BIT, mine.getLocation(), 2);
                     }
                     Util.playSpedParticleAtAll(getPlateLocation(), Particle.SMOKE_NORMAL, 1, 0.3f, 0);
-                    for (ConquestEntity entity : Conquest.getGame().getAllEntities()) {
-                        if (owner.getTeam() != entity.getTeam()) {
-                            if (getPlateLocation().distance(entity.getBukkitEntity().getLocation()) < RANGE) {
+                    Location mineLocation = Mine.this.getPlateLocation();
+                    for(Entity entity : mineLocation.getWorld().getNearbyEntities(mineLocation, RANGE, RANGE, RANGE)) {
+                        ConquestEntity conquestEntity = Conquest.getGame().getConquestEntity(entity.getUniqueId());
+                        if(conquestEntity != null && Mine.this.owner.getTeam() != conquestEntity.getTeam()) {
+                            if(mineLocation.distance(entity.getLocation()) < RANGE) {
                                 blowUp();
                                 stopTask();
                                 return;

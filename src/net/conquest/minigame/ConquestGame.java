@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ConquestGame {
 
@@ -89,7 +90,7 @@ public class ConquestGame {
     public void removePlayerByBalance(Player player) {
         if (containsPlayer(player)) {
             for (ConquestTeam conquestTeam : conquestTeams) {
-                conquestTeam.removeEntity(getConquestPlayer(player));
+                conquestTeam.removeEntity(getConquestPlayer(player.getUniqueId()));
             }
         }
     }
@@ -122,34 +123,29 @@ public class ConquestGame {
         spectators.remove(player);
     }
 
-    private ConquestPlayer getConquestPlayer(Player player) {
-        for (ConquestTeam conquestTeam : conquestTeams) {
-            for (ConquestPlayer entity : conquestTeam.getPlayers()) {
-                if (entity.getOwner() == player) {
-                    return entity;
-                }
-            }
-        }
-        return null;
+    public ConquestPlayer getConquestPlayer(UUID playerID) {
+        ConquestEntity player = this.getConquestEntity(playerID);
+
+        return (player instanceof ConquestPlayer) ? (ConquestPlayer)player : null;
     }
 
-    public ConquestEntity getConquestEntity(Entity entity) {
+    public ConquestEntity getConquestEntity(UUID entityID) {
         for (ConquestTeam conquestTeam : conquestTeams) {
-            for (ConquestEntity conquestEntity : conquestTeam.getEntities()) {
-                if (conquestEntity.getBukkitEntity() == entity) {
-                    return conquestEntity;
-                }
+            ConquestEntity entity = conquestTeam.getEntity(entityID);
+
+            if(entity != null) {
+                return entity;
             }
         }
         return null;
     }
 
     private boolean containsPlayer(Player player) {
-        return getConquestPlayer(player) != null;
+        return getConquestPlayer(player.getUniqueId()) != null;
     }
 
     public void setPlayerKit(Player player, Kit kit) {
-        ConquestPlayer conquestPlayer = getConquestPlayer(player);
+        ConquestPlayer conquestPlayer = getConquestPlayer(player.getUniqueId());
         conquestPlayer.setKit(kit);
     }
 

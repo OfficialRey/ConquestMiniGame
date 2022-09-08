@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class ConquestPlayer extends ConquestEntity {
 
@@ -202,13 +203,6 @@ public class ConquestPlayer extends ConquestEntity {
                 item.addAmount();
                 equipItems();
             }
-        }
-    }
-
-    @Override
-    public void damageTrue(int damage, ConquestEntity damager, EntityDamageEvent.DamageCause cause) {
-        if (!isVulnerable && !isDamageable && !isSpectating) {
-            super.damageTrue(damage, damager, cause);
         }
     }
 }

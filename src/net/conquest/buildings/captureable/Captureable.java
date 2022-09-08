@@ -58,7 +58,14 @@ public abstract class Captureable {
     }
 
     public void run() {
+        runStructures();
         runCapture();
+    }
+
+    private void runStructures() {
+        for(Structure to_run : this.structures) {
+            to_run.run();
+        }
     }
 
     private void runCapture() {
@@ -144,10 +151,8 @@ public abstract class Captureable {
         attackTime = 0;
         bar.setTitle(currentConquestTeam.getChatColor() + zone.NAME);
         bar.setColor(currentConquestTeam.getBarColor());
-        for (ConquestEntity entity : Conquest.getGame().getAllEntities()) {
-            if (entity instanceof ConquestPlayer) {
-                sendCaptureMessage((ConquestPlayer) entity);
-            }
+        for (ConquestPlayer player : Conquest.getGame().getAllPlayers()) {
+            sendCaptureMessage(player);
         }
         initStructures();
     }
@@ -155,6 +160,7 @@ public abstract class Captureable {
     private void initStructures() {
         for (Structure structure : structures) {
             structure.reset();
+            structure.setTeam(this.getCurrentTeam());
         }
     }
 
@@ -202,6 +208,7 @@ public abstract class Captureable {
     }
 
     protected void addStructure(Structure structure) {
+        structure.setTeam(this.getCurrentTeam());
         structures.add(structure);
     }
 

@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public class Conquest extends JavaPlugin {
 
     private static Conquest plugin;
