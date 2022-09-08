@@ -28,7 +28,7 @@ public class KnightMob extends ConquestMob {
     }
 
     @Override
-    public void onDeath() {
+    public void onMobDeath() {
 
     }
 

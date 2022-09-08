@@ -25,7 +25,7 @@ public class ScarecrowMob extends ConquestMob {
     }
 
     @Override
-    public void onDeath() {
+    public void onMobDeath() {
 
     }
 
