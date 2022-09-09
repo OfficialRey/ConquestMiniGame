@@ -22,15 +22,24 @@ public abstract class Structure {
         this.executionTime = executionTime;
     }
 
-    public void setTeam(ConquestTeam team) {
-        this.team = team;
+    public void startTask() {
+        task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                execute();
+            }
+        }.runTaskTimer(Conquest.getPlugin(), 0, executionTime / Util.GAME_SPEED);
     }
-    public void run() {
-        execute();
+
+    public void stopTask() {
+        if (task != null) {
+            task.cancel();
+        }
     }
 
     protected abstract void execute();
 
     public void reset() {
+        stopTask();
     }
 }

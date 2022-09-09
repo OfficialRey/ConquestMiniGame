@@ -3,9 +3,6 @@ package net.conquest.entities.abilities;
 import net.conquest.menu.item.BaseItem;
 import org.bukkit.Material;
 
-import java.util.Arrays;
-import java.util.List;
-
 public enum AbilityList {
 
 
@@ -19,23 +16,23 @@ public enum AbilityList {
     SUICIDE("Suicide", "Leave with style.", Material.TNT, 30, 40),
 
     //FIREMAGE
-    FIRE_BREATH("Fire Breath", Arrays.asList("Become a flamethrower."), Material.FLINT_AND_STEEL, 5, 7, 35),
+    FIRE_BREATH("Fire Breath", "Become a flamethrower.", Material.FLINT_AND_STEEL, 5, 7, 35),
 
     //MECHANIC
     AUTO_TURRET("Automatic Turret", "Shoots your opponents.//Literally does your job but is unpaid.", Material.DISPENSER, 5, 11, 0),
     MINE("Mine Field", "Places a mine on the ground for your opponents to step onto.", Material.STONE_PRESSURE_PLATE, 10, 15),
 
     //NULL_ABILITY
-    NONE("", Arrays.asList(""), Material.AIR, 0, 0, 0);
+    NONE("", "", Material.AIR, 0, 0, 0);
 
     public final String TITLE;
-    public final List<String> DESCRIPTION;
+    public final String DESCRIPTION;
     public final Material MATERIAL;
     public final int DAMAGE;
     public final int COOLDOWN;
     public final int REPETITIONS;
 
-    AbilityList(String TITLE, List<String> DESCRIPTION, Material MATERIAL, int DAMAGE, int COOLDOWN, int REPETITIONS) {
+    AbilityList(String TITLE, String DESCRIPTION, Material MATERIAL, int DAMAGE, int COOLDOWN, int REPETITIONS) {
         this.TITLE = TITLE;
         this.DESCRIPTION = DESCRIPTION;
         this.MATERIAL = MATERIAL;
@@ -44,7 +41,7 @@ public enum AbilityList {
         this.REPETITIONS = REPETITIONS;
     }
 
-    AbilityList(String TITLE, List<String> DESCRIPTION, Material MATERIAL, int DAMAGE, int COOLDOWN) {
+    AbilityList(String TITLE, String DESCRIPTION, Material MATERIAL, int DAMAGE, int COOLDOWN) {
         this.TITLE = TITLE;
         this.DESCRIPTION = DESCRIPTION;
         this.MATERIAL = MATERIAL;

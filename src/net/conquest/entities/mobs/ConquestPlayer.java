@@ -21,7 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class ConquestPlayer extends ConquestEntity {
 
@@ -56,7 +55,7 @@ public class ConquestPlayer extends ConquestEntity {
         getOwner().sendMessage(Util.PREFIX + "You selected the kit " + kit.getTitle() + "");
         this.kit = kit.copy();
         setItems(kit.getConquestItems());
-        ((Player) entity).getInventory().setItem(8, ItemList.getCompass(conquestTeam).getItemStack());
+        ((Player) entity).getInventory().setItem(8, ItemList.getCompass(conquestTeam).getMenuItem());
     }
 
     public void updateCompass() {
@@ -150,6 +149,7 @@ public class ConquestPlayer extends ConquestEntity {
         Util.noSpectate(getOwner());
         health = getMaxHealth();
         updateHealth();
+        resetItems();
         equipItems();
         equipAbilities();
         entity.teleport(conquestTeam.getBase().getLocation());
@@ -166,7 +166,7 @@ public class ConquestPlayer extends ConquestEntity {
 
     private void equipAbilities() {
         for (int i = 0; i < getAbilities().size(); i++) {
-            getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getItemStack());
+            getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getMenuItem());
         }
     }
 
@@ -175,7 +175,7 @@ public class ConquestPlayer extends ConquestEntity {
             if (getAbilities().get(i).isOnCooldown()) {
                 getAbilities().get(i).cooldown();
                 if (!isSpectating) {
-                    getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getItemStack());
+                    getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getMenuItem());
                 }
             }
         }
@@ -226,6 +226,7 @@ public class ConquestPlayer extends ConquestEntity {
             }
         }
     }
+
     @Override
     public void damageTrue(int damage, ConquestEntity damager, DamageCause cause) {
         super.damageTrue(damage, damager, cause);

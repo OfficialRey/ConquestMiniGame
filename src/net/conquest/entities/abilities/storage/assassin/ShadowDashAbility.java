@@ -9,7 +9,6 @@ import net.conquest.other.Util;
 import net.conquest.plugin.Conquest;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
@@ -42,10 +41,9 @@ public class ShadowDashAbility extends RepeatedActiveAbility {
         }
         //Particles and Damage
         Util.playParticleAtAll(player.getOwner().getLocation().add(0, 1, 0), Particle.SPELL, 5);
-        for(Entity entity : player.getBukkitEntity().getNearbyEntities(RANGE, RANGE, RANGE)) {
-            ConquestEntity conquestEntity = Conquest.getGame().getConquestEntity(entity.getUniqueId());
-            if(conquestEntity != null && conquestEntity.distance(player) < RANGE) {
-                conquestEntity.damage(damage, player, EntityDamageEvent.DamageCause.MAGIC);
+        for (ConquestEntity entity : Conquest.getGame().getAllEntities()) {
+            if (entity.distance(player) < RANGE) {
+                entity.damage(damage, player, EntityDamageEvent.DamageCause.MAGIC);
             }
         }
     }

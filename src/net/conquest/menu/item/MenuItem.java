@@ -8,11 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.List;
-
 public abstract class MenuItem extends BaseItem {
 
-    public MenuItem(String title, List<String> description, Material material) {
+    public MenuItem(String title, String description, Material material) {
         super(title, description, material);
     }
 

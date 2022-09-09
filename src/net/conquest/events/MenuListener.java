@@ -20,7 +20,7 @@ public class MenuListener implements Listener {
     public void onItemUse(PlayerInteractEvent e) {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             for (ItemList item : ItemList.values()) {
-                if (Util.compareItemStacks(e.getItem(), item.MENU_ITEM.getItemStack())) {
+                if (Util.compareItemStacks(e.getItem(), item.MENU_ITEM.getMenuItem())) {
                     e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 1);
                     item.MENU_ITEM.onInteract(e);
                     e.setCancelled(!BuildCommand.canBuild(e.getPlayer()));
@@ -53,7 +53,7 @@ public class MenuListener implements Listener {
             e.setCancelled(!BuildCommand.canBuild((Player) e.getWhoClicked()));
             if (e.getClick().isLeftClick()) {
                 for (ItemList item : ItemList.values()) {
-                    if (Util.compareItemStacks(e.getCurrentItem(), item.MENU_ITEM.getItemStack())) {
+                    if (Util.compareItemStacks(e.getCurrentItem(), item.MENU_ITEM.getMenuItem())) {
                         ((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 1);
                         e.getWhoClicked().closeInventory();
                         item.MENU_ITEM.onInventoryClick(e);

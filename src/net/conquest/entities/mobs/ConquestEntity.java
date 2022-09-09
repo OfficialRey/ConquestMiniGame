@@ -142,13 +142,35 @@ public abstract class ConquestEntity {
         return stat;
     }
 
+    public int getDodgeChance() {
+        int stat = 0;
+        for (ConquestItem item : items) {
+            stat += item.getDodgeChance();
+        }
+        return stat;
+    }
+
     public Entity getBukkitEntity() {
         return entity;
     }
 
     public abstract void run();
 
+    protected void resetItems() {
+        for (ConquestItem item : items) {
+            for (ItemList list : ItemList.values()) {
+                if (list.ITEM != null) {
+                    if (Util.compareItemStacks(item.getMenuItem(), list.ITEM.getMenuItem())) {
+                        item = list.ITEM.copy();
+
+                    }
+                }
+            }
+        }
+    }
+
     public void equipItems() {
+        resetItems();
         if (entity instanceof LivingEntity) {
             items.forEach(this::equipItem);
         }
@@ -163,23 +185,23 @@ public abstract class ConquestEntity {
         if (((LivingEntity) entity).getEquipment() != null) {
             if (entity instanceof Player) {
                 switch (item.getType()) {
-                    case WEAPON -> ((Player) entity).getInventory().setItem(0, item.getItemStack());
-                    case BOW -> ((Player) entity).getInventory().setItem(1, item.getItemStack());
-                    case AMMO -> ((Player) entity).getInventory().setItem(2, item.getItemStack().clone());
+                    case WEAPON -> ((Player) entity).getInventory().setItem(0, item.getMenuItem());
+                    case BOW -> ((Player) entity).getInventory().setItem(1, item.getMenuItem());
+                    case AMMO -> ((Player) entity).getInventory().setItem(2, item.getMenuItem());
                 }
                 //Mob specific
             } else if (entity instanceof LivingEntity) {
                 switch (item.getType()) {
-                    case WEAPON, BOW -> ((Mob) entity).getEquipment().setItemInMainHand(item.getItemStack());
+                    case WEAPON, BOW -> ((Mob) entity).getEquipment().setItemInMainHand(item.getMenuItem());
                 }
             }
             //Default Items
             switch (item.getType()) {
-                case OFFHAND -> ((LivingEntity) entity).getEquipment().setItemInOffHand(item.getItemStack());
-                case HELMET -> ((LivingEntity) entity).getEquipment().setHelmet(item.getItemStack());
-                case CHESTPLATE -> ((LivingEntity) entity).getEquipment().setChestplate(item.getItemStack());
-                case LEGGINGS -> ((LivingEntity) entity).getEquipment().setLeggings(item.getItemStack());
-                case BOOTS -> ((LivingEntity) entity).getEquipment().setBoots(item.getItemStack());
+                case OFFHAND -> ((LivingEntity) entity).getEquipment().setItemInOffHand(item.getMenuItem());
+                case HELMET -> ((LivingEntity) entity).getEquipment().setHelmet(item.getMenuItem());
+                case CHESTPLATE -> ((LivingEntity) entity).getEquipment().setChestplate(item.getMenuItem());
+                case LEGGINGS -> ((LivingEntity) entity).getEquipment().setLeggings(item.getMenuItem());
+                case BOOTS -> ((LivingEntity) entity).getEquipment().setBoots(item.getMenuItem());
             }
         }
     }
