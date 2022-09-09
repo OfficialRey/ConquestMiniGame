@@ -11,6 +11,9 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class ConquestTeam {
     private final Color color;
@@ -19,7 +22,7 @@ public class ConquestTeam {
     private final String name;
     private final int id;
 
-    private ArrayList<ConquestEntity> entities;
+    private HashMap<UUID, ConquestEntity> entities;
     private ArrayList<Captureable> zones;
 
     public ConquestTeam(BarColor barColor, ChatColor chatColor, Color color, String name, int id) {
@@ -28,13 +31,13 @@ public class ConquestTeam {
         this.chatColor = chatColor;
         this.name = name;
         this.id = id;
-        entities = new ArrayList<>();
+        entities = new HashMap<>();
         zones = new ArrayList<>();
     }
 
     public void addEntity(ConquestEntity entity) {
-        if (!entities.contains(entity))
-            entities.add(entity);
+        if (!entities.containsKey(entity.getBukkitEntity().getUniqueId()))
+            entities.put(entity.getBukkitEntity().getUniqueId(), entity);
         if (entity instanceof ConquestPlayer) {
             Player p = ((ConquestPlayer) entity).getOwner();
             p.setPlayerListName(chatColor + p.getName());
@@ -59,7 +62,7 @@ public class ConquestTeam {
 
     public ArrayList<ConquestPlayer> getPlayers() {
         ArrayList<ConquestPlayer> players = new ArrayList<>();
-        for (ConquestEntity entity : entities) {
+        for (ConquestEntity entity : entities.values()) {
             if (entity instanceof ConquestPlayer) {
                 players.add((ConquestPlayer) entity);
             }
@@ -67,8 +70,12 @@ public class ConquestTeam {
         return players;
     }
 
-    public ArrayList<ConquestEntity> getEntities() {
-        return entities;
+    public Collection<ConquestEntity> getEntities() {
+        return entities.values();
+    }
+
+    public ConquestEntity getEntity(UUID entityID) {
+        return this.entities.get(entityID);
     }
 
     public int getSize() {
@@ -127,7 +134,7 @@ public class ConquestTeam {
             zone.getCurrentTeam().addZone(zone);
         }
 
-        for (ConquestEntity entity : entities) {
+        for (ConquestEntity entity : entities.values()) {
             entity.regenerateHealth();
             entity.run();
         }
@@ -163,14 +170,7 @@ public class ConquestTeam {
 
     //Remove dead or unused entities to save memory
     public void cleanUp() {
-        ArrayList<ConquestEntity> newEntities = new ArrayList<>();
-
-        for (ConquestEntity entity : entities) {
-            if (!(entity.getBukkitEntity() == null || entity.getBukkitEntity().isDead())) {
-                newEntities.add(entity);
-            }
-        }
-        entities = newEntities;
+        this.entities.entrySet().removeIf(entry -> entry.getValue().getBukkitEntity() == null || entry.getValue().getBukkitEntity().isDead());
     }
 
     public boolean isEliminated() {

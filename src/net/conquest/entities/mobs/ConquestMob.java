@@ -54,7 +54,7 @@ public abstract class ConquestMob extends ConquestEntity {
     private void clearTarget() {
         if (getTarget() != null) {
             if (getTarget() instanceof Player) {
-                ConquestPlayer player = (ConquestPlayer) Conquest.getGame().getConquestEntity(getTarget());
+                ConquestPlayer player = Conquest.getGame().getConquestPlayer(getTarget().getUniqueId());
                 if (player != null && player.isSpectating()) {
                     setTarget(null);
                 }

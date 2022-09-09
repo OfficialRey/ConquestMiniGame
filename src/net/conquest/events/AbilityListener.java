@@ -19,7 +19,7 @@ public class AbilityListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        ConquestPlayer player = (ConquestPlayer) Conquest.getGame().getConquestEntity(e.getPlayer());
+        ConquestPlayer player = Conquest.getGame().getConquestPlayer(e.getPlayer().getUniqueId());
         if (player != null && player.getKit() != null) {
             if (!player.isSpectating()) {
                 player.getAbilities().forEach(ability -> {
@@ -35,7 +35,7 @@ public class AbilityListener implements Listener {
     public void onLaunchArrow(ProjectileLaunchEvent e) {
         if (e.getEntity() instanceof Arrow) {
             if (e.getEntity().getShooter() instanceof Entity) {
-                ConquestEntity entity = Conquest.getGame().getConquestEntity((Entity) e.getEntity().getShooter());
+                ConquestEntity entity = Conquest.getGame().getConquestEntity(((Entity) e.getEntity().getShooter()).getUniqueId());
                 if (entity instanceof ConquestPlayer) {
                     ConquestPlayer player = (ConquestPlayer) entity;
                     if (player.getKit() != null) {
@@ -60,12 +60,12 @@ public class AbilityListener implements Listener {
     @EventHandler
     public void onActivateAbility(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ConquestPlayer player = (ConquestPlayer) Conquest.getGame().getConquestEntity(e.getPlayer());
+            ConquestPlayer player = Conquest.getGame().getConquestPlayer(e.getPlayer().getUniqueId());
             if (player != null && player.getKit() != null) {
                 if (!player.isSpectating()) {
                     player.getAbilities().forEach(ability -> {
                         if (ability instanceof ActiveAbility) {
-                            if (Util.compareItemStacks(e.getItem(), ability.getMenuItem())) {
+                            if (Util.compareItemStacks(e.getItem(), ability.getItemStack())) {
                                 ((ActiveAbility) ability).execute(player);
                             }
                         }

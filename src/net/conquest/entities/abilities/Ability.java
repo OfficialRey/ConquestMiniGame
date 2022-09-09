@@ -6,7 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Ability extends BaseItem {
 
@@ -14,29 +16,38 @@ public abstract class Ability extends BaseItem {
     protected final int damage;
     protected final int executions;
     private int currentCooldown;
+    private ItemStack cooldownItem;
 
     public Ability(AbilityList abilityList) {
         super(ChatColor.GOLD + abilityList.TITLE, abilityList.DESCRIPTION, abilityList.MATERIAL);
-        cooldown = abilityList.COOLDOWN;
-        damage = abilityList.DAMAGE;
-        executions = 1 + abilityList.REPETITIONS;
-        currentCooldown = 0;
+        this.cooldown = abilityList.COOLDOWN;
+        this.damage = abilityList.DAMAGE;
+        this.executions = 1 + abilityList.REPETITIONS;
+        this.currentCooldown = 0;
+        this.modifiyMenuItem();
+        this.cooldownItem = this.createCooldownItem();
     }
 
     @Override
-    public ItemStack getMenuItem() {
-        ItemStack item = super.getMenuItem();
-        ItemMeta im = item.getItemMeta();
+    public ItemStack getItemStack() {
+        if(this.isOnCooldown()) {
+            this.updateCooldownItem();
 
-        assert im != null;
+            return this.cooldownItem;
+        }
 
-        List<String> lore = im.getLore();
+        return super.getItemStack();
+    }
 
-        assert lore != null;
+    private void modifiyMenuItem()  {
+        assert !this.isOnCooldown();
 
-        lore.add("");
+        ItemStack baseItem = this.getItemStack();
+        ItemMeta baseItemMeta = baseItem.getItemMeta();
 
-        if (cooldown > 0) {
+        List<String> lore = baseItemMeta.getLore();
+
+        if (this.cooldown > 0) {
             lore.add(ChatColor.WHITE + "Cooldown: " + ChatColor.GREEN + cooldown);
             lore.add("");
         }
@@ -47,32 +58,54 @@ public abstract class Ability extends BaseItem {
             lore.add(ChatColor.BLUE + "Passive Ability");
         }
 
-
-        if (currentCooldown > 0) {
-            lore.add("");
-            lore.add(ChatColor.WHITE + "This ability is on " + ChatColor.RED + "Cooldown" + ChatColor.WHITE + ":");
-            lore.add(ChatColor.WHITE + "Time left: " + ChatColor.GRAY + currentCooldown + ChatColor.WHITE + " seconds.");
-            item.setType(Material.GRAY_DYE);
-            item.setAmount(currentCooldown);
-        }
-        im.setLore(lore);
-        item.setItemMeta(im);
-        return item;
+        baseItemMeta.setLore(lore);
+        baseItem.setItemMeta(baseItemMeta);
     }
 
+    private void updateCooldownItem() {
+        if(!this.isOnCooldown()) return;
+
+        ItemMeta cooldownItemMeta = Objects.requireNonNull(this.cooldownItem.getItemMeta());
+
+        List<String> lore = cooldownItemMeta.getLore();
+        lore.set(lore.size() - 1, ChatColor.WHITE + "Time left: " + ChatColor.GRAY + currentCooldown + ChatColor.WHITE + " seconds.");
+        cooldownItemMeta.setLore(lore);
+
+        this.cooldownItem.setItemMeta(cooldownItemMeta);
+        this.cooldownItem.setAmount(this.currentCooldown);
+    }
+
+    private ItemStack createCooldownItem() {
+        assert !this.isOnCooldown();
+
+        ItemStack cooldownItem = new ItemStack(Material.GRAY_DYE);
+        ItemMeta cooldownItemMeta = Objects.requireNonNull(cooldownItem.getItemMeta());
+
+        List<String> lore = Objects.requireNonNull(this.getItemStack().getItemMeta().getLore());
+        lore.add("");
+        lore.add(ChatColor.WHITE + "This ability is on " + ChatColor.RED + "Cooldown" + ChatColor.WHITE + ":");
+        lore.add(ChatColor.WHITE + "Time left: " + ChatColor.GRAY + currentCooldown + ChatColor.WHITE + " seconds.");
+        cooldownItemMeta.setLore(lore);
+
+        cooldownItemMeta.setDisplayName(this.getItemStack().getItemMeta().getDisplayName());
+
+        cooldownItem.setItemMeta(cooldownItemMeta);
+
+        return cooldownItem;
+    }
 
     protected void startCooldown() {
-        currentCooldown = cooldown;
+        this.currentCooldown = this.cooldown;
     }
 
     public void cooldown() {
-        if (isOnCooldown()) {
-            currentCooldown--;
+        if (this.isOnCooldown()) {
+            this.currentCooldown--;
         }
     }
 
     public boolean isOnCooldown() {
-        return currentCooldown > 0;
+        return this.currentCooldown > 0;
     }
 
     public abstract Ability copy();
