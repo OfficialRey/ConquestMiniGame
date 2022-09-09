@@ -59,7 +59,7 @@ public class MineAbility extends ActiveAbility {
 
         public Mine(ConquestPlayer owner) {
             this.owner = owner;
-            mine = Util.createHelperArmorStand(getGroundBlock(owner.getOwner().getLocation().add(0, 0.5, 0)));
+            mine = Util.createHelperArmorStand(owner.getOwner().getLocation(), true, new Vector(0, -1.38f, 0));
             mine.getEquipment().setHelmet(new ItemStack(Material.STONE_PRESSURE_PLATE));
             Util.playSoundAtAll(Sound.BLOCK_STONE_PLACE, owner.getOwner().getLocation());
             task = run();
@@ -88,10 +88,10 @@ public class MineAbility extends ActiveAbility {
                     }
                     Util.playSpedParticleAtAll(getPlateLocation(), Particle.SMOKE_NORMAL, 1, 0.3f, 0);
                     Location mineLocation = Mine.this.getPlateLocation();
-                    for(Entity entity : mineLocation.getWorld().getNearbyEntities(mineLocation, RANGE, RANGE, RANGE)) {
+                    for (Entity entity : mineLocation.getWorld().getNearbyEntities(mineLocation, RANGE, RANGE, RANGE)) {
                         ConquestEntity conquestEntity = Conquest.getGame().getConquestEntity(entity.getUniqueId());
-                        if(conquestEntity != null && Mine.this.owner.getTeam() != conquestEntity.getTeam()) {
-                            if(mineLocation.distance(entity.getLocation()) < RANGE) {
+                        if (conquestEntity != null && Mine.this.owner.getTeam() != conquestEntity.getTeam()) {
+                            if (mineLocation.distance(entity.getLocation()) < RANGE) {
                                 blowUp();
                                 stopTask();
                                 return;

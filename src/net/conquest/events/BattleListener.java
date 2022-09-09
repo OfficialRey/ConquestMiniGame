@@ -8,6 +8,7 @@ import net.conquest.gamestates.LobbyState;
 import net.conquest.other.DamageFactor;
 import net.conquest.other.Util;
 import net.conquest.plugin.Conquest;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -63,7 +64,7 @@ public class BattleListener implements Listener {
         if (e.getCause() == DamageCause.PROJECTILE) {
             if (e.getDamager() instanceof Projectile) {
                 Projectile projectile = (Projectile) e.getDamager();
-                ConquestEntity attacker = Conquest.getGame().getConquestEntity(((Entity)projectile.getShooter()).getUniqueId());
+                ConquestEntity attacker = Conquest.getGame().getConquestEntity(((Entity) projectile.getShooter()).getUniqueId());
                 ConquestEntity victim = Conquest.getGame().getConquestEntity(e.getEntity().getUniqueId());
 
                 if (attacker != null && victim != null) {
@@ -114,9 +115,7 @@ public class BattleListener implements Listener {
     @EventHandler
     public void removeArrows(ProjectileHitEvent e) {
         if (e.getEntity() instanceof Arrow) {
-            if (e.getEntity().isDead() || e.getEntity().isOnGround() || e.getEntity().getLocation().getBlock().getType() != Material.AIR) {
-                e.getEntity().remove();
-            }
+            e.getEntity().remove();
         }
     }
 }

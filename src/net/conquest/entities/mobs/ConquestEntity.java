@@ -71,7 +71,15 @@ public abstract class ConquestEntity {
     }
 
     private int calculateDamage(int damage) {
-        return (int) (damage * (100D / (100D + (double) defense)));
+        damage = (int) (damage * (100D / (100D + (double) defense)));
+        return damage > 0 ? damage : 1;
+    }
+
+
+    //USE WITH CAUTION!!!
+    public void damageAsync(int damage, ConquestEntity damager) {
+        isDamageable = true;
+        damageTrue(damage, damager, null);
     }
 
     public void damageTrue(int damage, ConquestEntity damager, DamageCause cause) {
@@ -88,6 +96,13 @@ public abstract class ConquestEntity {
                     return;
                 }
                 updateHealth();
+
+                if (damager instanceof ConquestPlayer) {
+                    ((ConquestPlayer) damager).getPlayerGameStatistics().addDamageDealt(damage);
+                    if (cause == DamageCause.ENTITY_ATTACK) {
+                        ((ConquestPlayer) damager).onAttack(this);
+                    }
+                }
 
                 new BukkitRunnable() {
                     @Override

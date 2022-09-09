@@ -3,6 +3,7 @@ package net.conquest.entities.abilities.storage.assassin;
 import net.conquest.entities.abilities.Ability;
 import net.conquest.entities.abilities.AbilityList;
 import net.conquest.entities.abilities.PassiveAbility;
+import net.conquest.entities.mobs.ConquestEntity;
 import net.conquest.entities.mobs.ConquestPlayer;
 import net.conquest.entities.abilities.helper.TrailedProjectile;
 import org.bukkit.entity.Arrow;
@@ -18,6 +19,7 @@ public class SharpShooterAbility extends PassiveAbility {
     public Ability copy() {
         return new SharpShooterAbility();
     }
+
 
     @Override
     public void onMove(ConquestPlayer player) {
@@ -45,22 +47,17 @@ public class SharpShooterAbility extends PassiveAbility {
     }
 
     @Override
-    public void onAttack(ConquestPlayer player) {
+    protected void onAttack(ConquestPlayer player, ConquestEntity toAttack) {
 
     }
 
     @Override
-    public void onDamaged(ConquestPlayer player, EntityDamageEvent.DamageCause cause) {
+    protected void onAttacked(ConquestPlayer player, ConquestEntity attacker, EntityDamageEvent.DamageCause cause) {
 
     }
 
     @Override
     public void onRegenerateHealth(ConquestPlayer player) {
-
-    }
-
-    @Override
-    public void onJump(ConquestPlayer player) {
 
     }
 }

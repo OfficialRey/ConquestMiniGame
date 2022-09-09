@@ -140,20 +140,13 @@ public class ConquestTeam {
         }
     }
 
-    public Captureable getNextZone() {
-        for (Captureable captureable : zones) {
-            if (captureable.canBeCaptured()) {
-                return captureable;
-            }
-        }
-        return null;
+    public Captureable getBase() {
+        return zones.get(Util.NULL);
     }
 
-    public Captureable getZone(int id) {
-        for (Captureable zone : zones) {
-            if (zone.getPriority() == id) {
-                return zone;
-            }
+    public Captureable getNextZone() {
+        if (zones.size() > 0) {
+            return zones.get(zones.size() - 1);
         }
         return null;
     }

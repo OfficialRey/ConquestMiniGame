@@ -35,7 +35,7 @@ public abstract class Captureable {
         structures = new ArrayList<>();
         bar = Bukkit.createBossBar(currentConquestTeam.getChatColor() + zone.NAME, currentConquestTeam.getBarColor(), BarStyle.SEGMENTED_10);
         bar.setVisible(true);
-        marker = Util.createHelperArmorStand(location);
+        marker = Util.createHelperArmorStand(location, true);
         addStructure(new Barracks(location, data));
     }
 
@@ -187,25 +187,12 @@ public abstract class Captureable {
         return location;
     }
 
-    public int getCaptureTime() {
-        return zone.CAPTURE_TIME;
-    }
-
     public ConquestTeam getCurrentTeam() {
         return currentConquestTeam;
     }
 
-    public int getPriority() {
-        return zone.ID;
-    }
-
     public boolean canBeCaptured() {
-        for (Captureable captureable : currentConquestTeam.getZones()) {
-            if (captureable.getPriority() > getPriority()) {
-                return false;
-            }
-        }
-        return true;
+        return currentConquestTeam.getNextZone() == this;
     }
 
     protected void addStructure(Structure structure) {

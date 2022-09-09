@@ -1,13 +1,11 @@
 package net.conquest.kits;
 
+import net.conquest.entities.abilities.storage.assassin.CreepBonusAbility;
 import net.conquest.entities.abilities.storage.assassin.SharpShooterAbility;
-import net.conquest.entities.abilities.storage.firemage.FireBreathAbility;
-import net.conquest.entities.abilities.storage.maniac.IrresponsibleAbility;
 import net.conquest.entities.abilities.storage.maniac.SuicideAbility;
 import net.conquest.entities.abilities.storage.mechanic.AutoTurretAbility;
 import net.conquest.entities.abilities.storage.mechanic.MineAbility;
 import net.conquest.entities.abilities.storage.assassin.ShadowDashAbility;
-import net.conquest.entities.abilities.storage.assassin.WallRunAbility;
 import net.conquest.menu.item.game.ItemList;
 import org.bukkit.Material;
 
@@ -29,7 +27,7 @@ public class KitList {
                 ItemList.BROWN_LEGGINGS,
                 ItemList.BLACK_BOOTS
         ); //TODO: Wall jump, wall run
-        kit.setAbilities(new WallRunAbility(), new ShadowDashAbility(), new SharpShooterAbility());
+        kit.setAbilities(new ShadowDashAbility(), new SharpShooterAbility(), new CreepBonusAbility());
         kits.add(kit);
 
         kit = new Kit("Maniac", "He changed. He is different now.//He just got released from the madhouse.////The third time...", Material.FLINT_AND_STEEL,
@@ -39,7 +37,7 @@ public class KitList {
                 ItemList.BLACK_BOOTS,
                 ItemList.ELVEN_SWORD
         );
-        kit.setAbilities(new IrresponsibleAbility(), new SuicideAbility());
+        kit.setAbilities(new SuicideAbility());
         kits.add(kit);
 
         kit = new Kit("Mechanic", "A unit that crafts its materials itself.", Material.IRON_INGOT,
