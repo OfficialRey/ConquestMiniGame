@@ -47,8 +47,8 @@ public class Util {
 
     public static void addLobbyItems(Player player) {
         resetPlayer(player);
-        player.getInventory().addItem(ItemList.KIT_SELECTOR.MENU_ITEM.getMenuItem());
-        player.getInventory().addItem(ItemList.PLAYER_STATS.MENU_ITEM.getMenuItem());
+        player.getInventory().addItem(ItemList.KIT_SELECTOR.MENU_ITEM.getItemStack());
+        player.getInventory().addItem(ItemList.PLAYER_STATS.MENU_ITEM.getItemStack());
     }
 
     public static void playSound(Player player, Sound sound) {

@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.Arrays;
+
 public class KitSelector extends MenuItem {
 
     public KitSelector() {
-        super(ChatColor.LIGHT_PURPLE + "Kit Selection", "Choose a kit to play with.", Material.IRON_CHESTPLATE);
+        super(ChatColor.LIGHT_PURPLE + "Kit Selection", Arrays.asList("Choose a kit to play with."), Material.IRON_CHESTPLATE);
     }
 
     @Override

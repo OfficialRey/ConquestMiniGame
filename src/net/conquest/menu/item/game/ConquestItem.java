@@ -7,7 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ConquestItem extends BaseItem {
 
@@ -16,7 +18,6 @@ public class ConquestItem extends BaseItem {
     protected final int health;
     protected final int attack;
     protected final int defense;
-    protected final int dodgeChance;
     private Rarity rarity;
 
     protected final ItemType type;
@@ -24,142 +25,109 @@ public class ConquestItem extends BaseItem {
     //TODO: Item abilities
     //private ItemAbility ability;
 
-    public ConquestItem(String title, String description, Material material, int amount, ItemType type, int health, int attack, int defense) {
-        super(title, description, material, amount);
-        this.type = type;
-        this.health = health;
-        this.attack = attack;
-        this.defense = defense;
-        dodgeChance = 0;
-        calculateRarity();
-    }
 
-    public ConquestItem(String title, String description, Material material, int amount, ItemType type, int health, int attack, int defense, int dodgeChance) {
-        super(title, description, material, amount);
-        this.type = type;
-        this.health = health;
-        this.attack = attack;
-        this.defense = defense;
-        this.dodgeChance = dodgeChance;
-        calculateRarity();
-    }
-
-    public ConquestItem(String title, String description, Material material, ItemType type, int health, int attack, int defense) {
-        super(title, description, material, 1);
-        this.type = type;
-        this.health = health;
-        this.attack = attack;
-        this.defense = defense;
-        dodgeChance = 0;
-        calculateRarity();
-    }
-
-    public ConquestItem(String title, String description, ItemStack itemStack, ItemType type, int health, int attack, int defense) {
+    public ConquestItem(String title, List<String> description, ItemStack itemStack, ItemType type, int health, int attack, int defense) {
         super(title, description, itemStack);
         this.type = type;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
-        dodgeChance = 0;
-        calculateRarity();
+        this.calculateRarity();
+        this.modifiyMenuItem();
+    }
+    public ConquestItem(String title, List<String> description, Material material, int amount, ItemType type, int health, int attack, int defense) {
+        this(title, description, new ItemStack(material, amount), type, health, attack, defense);
     }
 
-    @Override
-    public ItemStack getMenuItem() {
-        ItemStack item = super.getMenuItem();
-        ItemMeta im = item.getItemMeta();
+    public ConquestItem(String title, List<String> description, Material material, ItemType type, int health, int attack, int defense) {
+        this(title, description, material, 1, type, health, attack, defense);
+    }
 
-        assert im != null;
+    private void modifiyMenuItem() {
+        ItemStack baseMenuItem = this.getItemStack();
+        ItemMeta baseMenuItemMeta = Objects.requireNonNull(baseMenuItem.getItemMeta());
 
-        im.setDisplayName(rarity.COLOR + im.getDisplayName());
+        baseMenuItemMeta.setDisplayName(this.rarity.COLOR + this.getTitle());
 
-        List<String> lore = im.getLore();
+        List<String> lore = this.getDescription();
 
-        assert lore != null;
-
-        if (health != 0 || attack != 0 || defense != 0) {
+        if (this.health != 0 || this.attack != 0 || this.defense != 0) {
             lore.add("");
-            if (health != 0) {
-                lore.add(ChatColor.BLUE + "+ " + health + " Health");
+            if (this.health != 0) {
+                lore.add(ChatColor.BLUE + "+ " + this.health + " Health");
             }
-            if (attack != 0) {
-                lore.add(ChatColor.BLUE + "+ " + attack + " Damage");
+            if (this.attack != 0) {
+                lore.add(ChatColor.BLUE + "+ " + this.attack + " Damage");
             }
-            if (defense != 0) {
-                lore.add(ChatColor.BLUE + "+ " + defense + " Defense");
-            }
-            if (dodgeChance != 0) {
-                lore.add(ChatColor.BLUE + "+ " + dodgeChance + "% Dodge Chance");
+            if (this.defense != 0) {
+                lore.add(ChatColor.BLUE + "+ " + this.defense + " Defense");
             }
         }
 
         lore.add("");
-        lore.add(ChatColor.WHITE + "Rarity: " + rarity.COLOR + rarity.NAME);
+        lore.add(ChatColor.WHITE + "Rarity: " + this.rarity.COLOR + this.rarity.NAME);
 
-        im.setLore(lore);
-        item.setItemMeta(im);
+        baseMenuItemMeta.setLore(lore);
 
-        return item;
+        baseMenuItem.setItemMeta(baseMenuItemMeta);
     }
 
     public ItemType getType() {
-        return type;
+        return this.type;
     }
 
     private void calculateRarity() {
 
         //TODO: Add ability
 
-        int itemStat = (health != 0 && attack != 0 && defense != 0) ? 1 : 0;
+        int itemStat = (this.health != 0 && this.attack != 0 && this.defense != 0) ? 1 : 0;
 
-        itemStat += (int) (health * HEALTH_FACTOR + defense + attack);
+        itemStat += (int) (this.health * ConquestItem.HEALTH_FACTOR + this.defense + this.attack);
         if (itemStat > Rarity.LEGENDARY.STAT_MIN) {
-            rarity = Rarity.LEGENDARY;
+            this.rarity = Rarity.LEGENDARY;
         } else if (itemStat > Rarity.EPIC.STAT_MIN) {
-            rarity = Rarity.EPIC;
+            this.rarity = Rarity.EPIC;
         } else if (itemStat > Rarity.RARE.STAT_MIN) {
-            rarity = Rarity.RARE;
+            this.rarity = Rarity.RARE;
         } else if (itemStat > Rarity.UNCOMMON.STAT_MIN) {
-            rarity = Rarity.UNCOMMON;
+            this.rarity = Rarity.UNCOMMON;
         } else {
-            rarity = Rarity.COMMON;
+            this.rarity = Rarity.COMMON;
         }
     }
 
     public int getHealth() {
-        return health;
+        return this.health;
     }
 
     public int getAttack() {
-        return attack;
+        return this.attack;
     }
 
     public int getDefense() {
-        return defense;
+        return this.defense;
     }
-
-    public int getDodgeChance() {
-        return dodgeChance;
-    }
-
-    public void setAmount(int value) {
-        amount = value;
+    
+    public void setAmount(int amount) {
+        this.getItemStack().setAmount(amount);
     }
 
     public boolean reduceAmount() {
-        if (amount > 0) {
-            amount--;
+        if(this.getAmount() > 0) {
+            this.setAmount(this.getAmount() - 1);
+
             return true;
         }
+
         return false;
     }
 
     public void addAmount() {
-        amount++;
+        this.setAmount(this.getAmount() + 1);
     }
 
     public ConquestItem copy() {
-        return new ConquestItem(title, description, material, amount, type, health, attack, defense);
+        return new ConquestItem(this.getTitle(), this.getDescription(), this.getMaterial(), this.getAmount(), this.type, this.health, this.attack, this.defense);
     }
 }
 

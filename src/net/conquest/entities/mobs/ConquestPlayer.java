@@ -47,7 +47,7 @@ public class ConquestPlayer extends ConquestEntity {
         getOwner().sendMessage(Util.PREFIX + "You selected the kit " + kit.getTitle() + "");
         this.kit = kit.copy();
         setItems(kit.getConquestItems());
-        ((Player) entity).getInventory().setItem(8, ItemList.getCompass(conquestTeam).getMenuItem());
+        ((Player) entity).getInventory().setItem(8, ItemList.getCompass(conquestTeam).getItemStack());
     }
 
     public void updateCompass() {
@@ -134,7 +134,6 @@ public class ConquestPlayer extends ConquestEntity {
         Util.noSpectate(getOwner());
         health = getMaxHealth();
         updateHealth();
-        resetItems();
         equipItems();
         equipAbilities();
         entity.teleport(conquestTeam.getZone(0).getLocation());
@@ -151,7 +150,7 @@ public class ConquestPlayer extends ConquestEntity {
 
     private void equipAbilities() {
         for (int i = 0; i < getAbilities().size(); i++) {
-            getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getMenuItem());
+            getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getItemStack());
         }
     }
 
@@ -160,7 +159,7 @@ public class ConquestPlayer extends ConquestEntity {
             if (getAbilities().get(i).isOnCooldown()) {
                 getAbilities().get(i).cooldown();
                 if (!isSpectating) {
-                    getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getMenuItem());
+                    getOwner().getInventory().setItem(8 - i, getAbilities().get(i).getItemStack());
                 }
             }
         }

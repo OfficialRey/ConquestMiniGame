@@ -7,73 +7,59 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class BaseItem {
+    private ItemStack menuItems;
 
-    protected final String title;
-    protected final String description;
-    protected final Material material;
-
-    protected int amount;
-
-    private final ItemStack itemStack;
-
-    public BaseItem(String title, String description, Material material, int amount) {
-        this.title = title;
-        this.description = description;
-        this.material = material;
-        this.amount = amount;
-        itemStack = null;
+    public BaseItem(String title, List<String> description, ItemStack baseItem) {
+        this.menuItems = this.createMenuItem(title, description, baseItem);
     }
 
-    public BaseItem(String title, String description, Material material) {
-        this.title = title;
-        this.description = description;
-        this.material = material;
-        this.amount = 1;
-        itemStack = null;
+    public BaseItem(String title, List<String> description, Material material, int amount) {
+        this(title, description, new ItemStack(material, amount));
     }
 
-    public BaseItem(String title, String description, ItemStack itemStack) {
-        this.title = title;
-        this.description = description;
-        this.itemStack = itemStack;
-        this.material = Material.AIR;
-        this.amount = 1;
+    public BaseItem(String title, List<String> description, Material material) {
+        this(title, description, new ItemStack(material));
     }
 
-    public ItemStack getMenuItem() {
-        ItemStack item = itemStack != null ? itemStack : new ItemStack(material, amount);
-        ItemMeta im = item.getItemMeta();
+    public ItemStack getItemStack() {
+        return this.menuItems;
+    }
 
-        assert im != null;
+    private ItemStack createMenuItem(String title, List<String> description, ItemStack baseItem) {
+        ItemStack menuItem = Objects.requireNonNull(baseItem).clone();
+        ItemMeta menuItemMeta = Objects.requireNonNull(menuItem.getItemMeta());
 
-        im.setUnbreakable(true);
-        im.setDisplayName(title);
-        ArrayList<String> lore = new ArrayList<>();
-        for (String line : description.split("//")) {
-            lore.add(ChatColor.GRAY + line);
-        }
-        im.setLore(lore);
-        im.addItemFlags(ItemFlag.values());
-        item.setItemMeta(im);
-        return item;
+        menuItemMeta.setUnbreakable(true);
+        menuItemMeta.setDisplayName(title);
+        menuItemMeta.setLore(description.stream().map(line -> ChatColor.GRAY + line).collect(Collectors.toList()));
+        menuItemMeta.addItemFlags(ItemFlag.values());
+
+        menuItem.setItemMeta(menuItemMeta);
+
+        return menuItem;
     }
 
     public String getTitle() {
-        return title;
+        return this.getItemStack().getItemMeta().getDisplayName();
     }
 
-    public String getDescription() {
-        return description;
+    public List<String> getDescription() {
+        return this.getItemStack().getItemMeta().getLore();
     }
 
     public Material getMaterial() {
-        return material;
+        return this.getItemStack().getType();
     }
 
     public int getAmount() {
-        return amount;
+        return this.getItemStack().getAmount();
     }
 }

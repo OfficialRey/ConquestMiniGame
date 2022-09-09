@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.Arrays;
+
 public class PlayerStatistics extends MenuItem {
 
     public PlayerStatistics() {
-        super(ChatColor.GOLD + "Statistics", "Show your achievements and progress.", Material.GOLD_INGOT);
+        super(ChatColor.GOLD + "Statistics", Arrays.asList("Show your achievements and progress."), Material.GOLD_INGOT);
     }
 
     @Override
