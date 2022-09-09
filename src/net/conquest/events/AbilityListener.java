@@ -65,7 +65,7 @@ public class AbilityListener implements Listener {
                 if (!player.isSpectating()) {
                     player.getAbilities().forEach(ability -> {
                         if (ability instanceof ActiveAbility) {
-                            if (Util.compareItemStacks(e.getItem(), ability.getMenuItem())) {
+                            if (Util.compareItemStacks(e.getItem(), ability.getItemStack())) {
                                 ((ActiveAbility) ability).execute(player);
                             }
                         }
