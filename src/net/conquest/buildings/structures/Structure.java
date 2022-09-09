@@ -14,9 +14,6 @@ public abstract class Structure {
     protected ConquestTeam team;
     private BukkitTask task;
 
-
-    private int exeTime;
-
     public Structure(Location location, int executionTime) {
         this.location = location;
         this.executionTime = executionTime;

@@ -20,11 +20,7 @@ public class GameStatus {
     }
 
     public void reset() {
-        gameTime = 0;
-    }
-
-    public int getGameTime() {
-        return gameTime;
+        
     }
 
     public int getRespawnTime() {

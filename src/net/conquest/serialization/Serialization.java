@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,30 +18,7 @@ public class Serialization {
     private static final YamlConfiguration saveCfg = YamlConfiguration.loadConfiguration(saveFile);
 
     public static void savePlayerStatistic(PlayerStatistic playerStatistic) {
-        String path = "player." + playerStatistic.getOwner().getUniqueId();
-        saveCfg.set(path + ".gold", playerStatistic.getGold());
-        saveCfg.set(path + ".gems", playerStatistic.getGems());
-        saveCfg.set(path + ".kills", playerStatistic.getKills());
-        saveCfg.set(path + ".deaths", playerStatistic.getDeaths());
-        saveCfg.set(path + ".playtime", playerStatistic.getPlaytime()); //int in seconds
-        try {
-            saveCfg.save(saveFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public static PlayerStatistic loadPlayerStatistic(Player player) {
-        String path = "player." + player.getUniqueId();
-        if (saveCfg.contains(path)) {
-            int gold = saveCfg.getInt(path + ".gold");
-            int gems = saveCfg.getInt(path + ".gems");
-            int kills = saveCfg.getInt(path + ".kills");
-            int deaths = saveCfg.getInt(path + ".deaths");
-            int playtime = saveCfg.getInt(path + ".playtime");
-            return new PlayerStatistic(player, gold, gems, kills, deaths, playtime);
-        }
-        return new PlayerStatistic(player);
     }
 
     public static void saveLobbyLocation(Location location) {

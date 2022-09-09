@@ -20,7 +20,7 @@ public class Util {
 
     public static final int GAME_SPEED = 1;
 
-    public static final int TICKS_PER_SECOND = 20, DEFAULT_HEALTH = 20, DEFAULT_HUNGER = 20, NULL = 0, MIN_PLAYERS = 1, MAX_PLAYERS = 20, START_COUNTDOWN = 3, END_COUNTDOWN = 20, IDLE_TIME = 15, KNIGHT_HORSE_CHANCE = 10, //10% Chance for a knight to ride a (undead) horse
+    public static final int TICKS_PER_SECOND = 20, DEFAULT_HEALTH = 20, DEFAULT_HUNGER = 20, NULL = 0, MIN_PLAYERS = 2, MAX_PLAYERS = 20, START_COUNTDOWN = 30, END_COUNTDOWN = 20, IDLE_TIME = 15, KNIGHT_HORSE_CHANCE = 10, //10% Chance for a knight to ride a (undead) horse
             DEAD_HORSE_CHANCE = 40, //40% Chance to ride an undead horse
             FOG_DAMAGE = 2, DEFAULT_RESPAWN_TIME = 5, RESPAWN_TIME_CAP = 45, MIN_BLOOD = 10, MAX_BLOOD = 30, MAX_TIME_STUCK = 15, SPAWN_PROTECTION = 3, BATTLE_TIME = 7;
 
@@ -197,10 +197,6 @@ public class Util {
 
     public static void lose(Player player) {
         sendTitle(player, ChatColor.RED + "ELIMINATED", ChatColor.GRAY + "You have been eliminated from the game.", 0.3f, 5f, 0.3f);
-    }
-
-    public static void win(Player player) {
-        sendTitle(player, ChatColor.GOLD + "WON", ChatColor.GRAY + "You have won the game.", 0.3f, 5f, 0.3f);
     }
 
     public static void sendTitle(Player player, String title, String subtitle, float fadeIn, float stay, float fadeOut) {

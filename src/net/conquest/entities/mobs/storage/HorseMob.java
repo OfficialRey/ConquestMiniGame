@@ -32,7 +32,7 @@ public class HorseMob extends ConquestEntity {
     }
 
     @Override
-    public void onDeath(ConquestEntity killer) {
+    public void onDeath() {
 
     }
 
