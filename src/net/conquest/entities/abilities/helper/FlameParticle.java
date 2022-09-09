@@ -5,7 +5,6 @@ import net.conquest.entities.mobs.ConquestPlayer;
 import net.conquest.other.ConquestTeam;
 import net.conquest.other.Util;
 import net.conquest.plugin.Conquest;
-import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +21,7 @@ public class FlameParticle {
     private final ConquestTeam team;
 
     public FlameParticle(ConquestPlayer source, int damage) {
-        particle = Util.createHelperArmorStand(source.getOwner().getLocation().add(0, 1.5f, 0));
+        particle = Util.createHelperArmorStand(source.getOwner().getLocation().add(0, 1.5f, 0), false);
         Vector velocity = source.getOwner().getLocation().getDirection().normalize().multiply(0.6f);
         particle.setGravity(true);
 

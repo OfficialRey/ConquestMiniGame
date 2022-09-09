@@ -3,6 +3,7 @@ package net.conquest.entities.mobs;
 import net.conquest.economy.PlayerGameStatistics;
 import net.conquest.entities.PlayerStatistic;
 import net.conquest.entities.abilities.Ability;
+import net.conquest.entities.abilities.PassiveAbility;
 import net.conquest.menu.item.ItemType;
 import net.conquest.menu.item.game.ConquestItem;
 import net.conquest.other.ConquestTeam;
@@ -151,7 +152,7 @@ public class ConquestPlayer extends ConquestEntity {
         resetItems();
         equipItems();
         equipAbilities();
-        entity.teleport(conquestTeam.getZone(0).getLocation());
+        entity.teleport(conquestTeam.getBase().getLocation());
         Util.createSpawnAnimation(entity);
         setVulnerable(false);
 
@@ -229,14 +230,31 @@ public class ConquestPlayer extends ConquestEntity {
     @Override
     public void damageTrue(int damage, ConquestEntity damager, DamageCause cause) {
         super.damageTrue(damage, damager, cause);
+        onAttacked(damager, cause);
         playerGameStatistics.addDamageReceived(damage);
-        if (damager instanceof ConquestPlayer) {
-            ((ConquestPlayer) damager).getPlayerGameStatistics().addDamageDealt(damage);
-        }
     }
 
     public PlayerGameStatistics getPlayerGameStatistics() {
         return playerGameStatistics;
+    }
+
+
+    public void onAttacked(ConquestEntity attacker, DamageCause cause) {
+        kit.getAbilities().forEach(ability -> {
+                    if (ability instanceof PassiveAbility) {
+                        ((PassiveAbility) ability).triggerDamaged(this, attacker, cause);
+                    }
+                }
+        );
+    }
+
+    public void onAttack(ConquestEntity toAttack) {
+        kit.getAbilities().forEach(ability -> {
+                    if (ability instanceof PassiveAbility) {
+                        ((PassiveAbility) ability).triggerAttack(this, toAttack);
+                    }
+                }
+        );
     }
 
     public void onGameEnd(boolean wonGame) {

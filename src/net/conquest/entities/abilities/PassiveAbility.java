@@ -1,5 +1,6 @@
 package net.conquest.entities.abilities;
 
+import net.conquest.entities.mobs.ConquestEntity;
 import net.conquest.entities.mobs.ConquestPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -34,27 +35,21 @@ public abstract class PassiveAbility extends Ability {
         }
     }
 
-    public void triggerAttack(ConquestPlayer player) {
+    public void triggerAttack(ConquestPlayer player, ConquestEntity toAttack) {
         if (!isOnCooldown()) {
-            onAttack(player);
+            onAttack(player, toAttack);
         }
     }
 
-    public void triggerDamaged(ConquestPlayer player, DamageCause cause) {
+    public void triggerDamaged(ConquestPlayer player, ConquestEntity attacker, DamageCause cause) {
         if (!isOnCooldown()) {
-            onDamaged(player, cause);
+            onAttacked(player, attacker, cause);
         }
     }
 
     public void triggerRegenerateHealth(ConquestPlayer player) {
         if (!isOnCooldown()) {
             onRegenerateHealth(player);
-        }
-    }
-
-    public void triggerJump(ConquestPlayer player) {
-        if (!isOnCooldown()) {
-            onJump(player);
         }
     }
 
@@ -66,11 +61,9 @@ public abstract class PassiveAbility extends Ability {
 
     protected abstract void onLaunchArrow(ConquestPlayer player, Arrow arrow);
 
-    protected abstract void onAttack(ConquestPlayer player);
+    protected abstract void onAttack(ConquestPlayer player, ConquestEntity toAttack);
 
-    protected abstract void onDamaged(ConquestPlayer player, DamageCause cause);
+    protected abstract void onAttacked(ConquestPlayer player, ConquestEntity attacker, DamageCause cause);
 
     protected abstract void onRegenerateHealth(ConquestPlayer player);
-
-    protected abstract void onJump(ConquestPlayer player);
 }
