@@ -63,7 +63,7 @@ public abstract class Captureable {
     }
 
     private void runStructures() {
-        for (Structure to_run : this.structures) {
+        for(Structure to_run : this.structures) {
             to_run.run();
         }
     }
