@@ -50,7 +50,7 @@ public class PeasantMob extends ConquestMob {
     }
 
     @Override
-    public void onDeath() {
+    public void onMobDeath() {
 
     }
 

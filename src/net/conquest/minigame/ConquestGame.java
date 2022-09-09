@@ -182,13 +182,14 @@ public class ConquestGame {
     }
 
     public void removeTeam(ConquestTeam conquestTeam) {
-        conquestTeam.delete();
+        conquestTeam.endGame(false);
         Bukkit.broadcastMessage(Util.PREFIX + "Team " + conquestTeam.getChatColor() + conquestTeam.getName() + ChatColor.WHITE + " has been " + ChatColor.GRAY + "eliminated" + ChatColor.WHITE + ".");
         conquestTeams.remove(conquestTeam);
 
         if (conquestTeams.size() < 2) {
             Bukkit.broadcastMessage(Util.PREFIX + ChatColor.WHITE + "Team " + conquestTeams.get(Util.NULL).getChatColor() + conquestTeams.get(Util.NULL).getName() + ChatColor.WHITE + " has won!");
-            conquestTeams.get(Util.NULL).delete();
+            conquestTeams.get(Util.NULL).endGame(true);
+            conquestTeams.get(Util.NULL).deleteEntities();
             conquestTeams.remove(conquestTeams.get(Util.NULL));
 
             gameStateManager.setGameState(GameState.ENDGAME_STATE);
@@ -275,7 +276,7 @@ public class ConquestGame {
     }
 
     private void resetTeams() {
-        conquestTeams.forEach(ConquestTeam::delete);
+        conquestTeams.forEach(ConquestTeam::deleteEntities);
         conquestTeams.clear();
 
     }

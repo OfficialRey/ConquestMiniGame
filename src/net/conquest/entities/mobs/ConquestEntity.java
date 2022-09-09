@@ -75,7 +75,6 @@ public abstract class ConquestEntity {
     }
 
     public void damageTrue(int damage, ConquestEntity damager, DamageCause cause) {
-
         if (isDamageable && isVulnerable) {
             if (damager == null || conquestTeam != damager.getTeam()) {
                 isDamageable = false;
@@ -85,11 +84,7 @@ public abstract class ConquestEntity {
                 ((Damageable) entity).damage(Util.NULL);
                 if ((int) health <= Util.NULL) {
                     health = Util.NULL;
-                    if (this instanceof ConquestPlayer) {
-                        DeathMessage.createDeathMessage((ConquestPlayer) this, damager);
-                        onDeath();
-                    }
-                    killEntity();
+                    onDeath(damager);
                     return;
                 }
                 updateHealth();
@@ -102,6 +97,10 @@ public abstract class ConquestEntity {
                 }.runTaskLater(Conquest.getPlugin(), 4);
             }
         }
+    }
+
+    public void killEntity() {
+        health = Util.NULL;
     }
 
     public int getMaxHealth() {
@@ -195,18 +194,11 @@ public abstract class ConquestEntity {
         return conquestTeam;
     }
 
-    public void killEntity() {
-        if (!(this instanceof ConquestPlayer)) {
-            ((Damageable) entity).setHealth(Util.NULL);
-        }
-        onDeath();
-    }
-
     public void updateHealth() {
         ((Damageable) entity).setHealth(health / getMaxHealth() * getEntityMaxHealth());
     }
 
-    public abstract void onDeath();
+    public abstract void onDeath(ConquestEntity killer);
 
     public abstract void onSummon(ConquestTeam conquestTeam);
 

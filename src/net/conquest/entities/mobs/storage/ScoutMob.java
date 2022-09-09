@@ -26,7 +26,7 @@ public class ScoutMob extends ConquestMob {
     }
 
     @Override
-    public void onDeath() {
+    public void onMobDeath() {
 
     }
 

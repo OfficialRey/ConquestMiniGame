@@ -16,12 +16,9 @@ import org.bukkit.entity.*;
 import javax.annotation.Nullable;
 
 public abstract class ConquestMob extends ConquestEntity {
-    private int stuckTime;
-    private Location oldLocation;
 
     public ConquestMob(Location location, MobData data, ConquestTeam conquestTeam) {
         super(createEntity(location, data.TYPE), data, conquestTeam);
-        oldLocation = entity.getLocation();
 
         setItems(getItems(conquestTeam));
         equipItems();
@@ -38,7 +35,7 @@ public abstract class ConquestMob extends ConquestEntity {
 
     private void checkIsDead() {
         if (entity.isDead() || (int) health <= Util.NULL) {
-            killEntity();
+            onDeath(null);
         }
     }
 
@@ -155,21 +152,17 @@ public abstract class ConquestMob extends ConquestEntity {
         }
     }
 
-    public void unStuck() {
-        if (oldLocation.distance(entity.getLocation()) < 0.5) {
-            stuckTime++;
-            if (stuckTime > Util.MAX_TIME_STUCK) {
-                killEntity();
-            }
-        } else {
-            stuckTime = 0;
-        }
-        oldLocation = entity.getLocation();
-    }
-
     protected abstract ConquestItem[] getItems(ConquestTeam conquestTeam);
 
-    public abstract void onDeath();
+    @Override
+    public void onDeath(ConquestEntity killer) {
+        ((Damageable) entity).setHealth(Util.NULL);
+        if (killer instanceof Player) {
+            ((ConquestPlayer) killer).getPlayerGameStatistics().addNPCKill();
+        }
+    }
+
+    public abstract void onMobDeath();
 
     public abstract void advancedAI();
 
